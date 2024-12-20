@@ -3,10 +3,11 @@ const fastify = require("fastify")({ logger: true });
 const sequelize = require('./config/db');
 const authRoutes = require("./routes/auth");
 const adminRoutes=require("./routes/admin");
+const teacherRoutes=require("./routes/teacherRoutes");
 
 fastify.register(authRoutes);
 fastify.register(adminRoutes);
-
+fastify.register(teacherRoutes);
 
 (async () => {
   try {
