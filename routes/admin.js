@@ -8,4 +8,5 @@ fastify.post('/admin/courses', { preHandler: authorizeRole(['admin']) }, adminCo
 fastify.get('/admin/courses', { preHandler: authorizeRole(['admin']) }, adminController.getCourses);
 fastify.post('/admin/students', { preHandler: authorizeRole(['admin']) }, adminController.createStudent); 
 fastify.post('/admin/teachers', { preHandler: authorizeRole(['admin']) }, adminController.createTeacher);
+fastify.put('/admin/update/:id', {preHandler:authorizeRole(['admin'])},adminController.UpdateUser);
 };
