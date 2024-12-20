@@ -77,35 +77,9 @@ const deleteCourse = async (request, reply) => {
   }
 };
 
-const acceptCourse = async (request, reply) => {
-  try {
-    const { courseId } = request.params;
-    const studentId = request.user.id;
-
-    const course = await Course.findByPk(courseId);
-    if (!course) {
-      return reply.status(404).send({ message: 'Course not found' });
-    }
-
-    const student = await Student.findByPk(studentId);
-    if (!student) {
-      return reply.status(404).send({ message: 'Student not found' });
-    }
-
-    await course.addStudent(student);
-    return reply.send({
-      message: `Student ${studentId} successfully enrolled in course ${courseId}`,
-    });
-  } catch (error) {
-    console.error(error);
-    return reply.status(500).send({ message: 'Error enrolling in course' });
-  }
-};
-
 module.exports = {
   getAllCourses,
   createCourse,
   updateCourse,
   deleteCourse,
-  acceptCourse,
 };
