@@ -3,21 +3,12 @@ const jwt = require("jsonwebtoken");
 
 exports.authenticate = async (request, reply) => {
     try {
-        // Get the Authorization header
         const authHeader = request.headers.authorization;
-        
-        // Check if the Authorization header exists and starts with "Bearer"
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return reply.code(401).send({ error: "Authentication token is missing or invalid." });
         }
-
-        // Extract token from the header
         const token = authHeader.split(" ")[1];
-        
-        // Verify the token using JWT_SECRET
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        // Attach user information to the request object
         request.user = decoded;
 
         console.log("Authenticated User:", request.user);
