@@ -13,7 +13,7 @@ exports.login = async (req, reply) => {
         const user = await User.findOne({ where: { email } });
         if (!user) {
             
-            await bcrypt.compare(password || "", "$2b$10$invalidsaltstringtoavoid");
+            await bcrypt.compare(password || User.password);
             return reply.status(401).send({ error: "Invalid passworrds." });
         }
 
