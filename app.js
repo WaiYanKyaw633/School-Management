@@ -1,13 +1,18 @@
 require("dotenv").config();
-const fastify = require("fastify")({ logger: true });
+
+const fastify = require('fastify')({ logger: true });
 const sequelize = require('./config/db');
 const authRoutes = require("./routes/auth");
 const adminRoutes=require("./routes/admin");
 const teacherRoutes=require("./routes/teacherRoutes");
+const studentRoutes=require("./routes/student");
 
 fastify.register(authRoutes);
 fastify.register(adminRoutes);
 fastify.register(teacherRoutes);
+fastify.register(studentRoutes);
+
+
 
 (async () => {
   try {

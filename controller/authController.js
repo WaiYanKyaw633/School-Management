@@ -1,3 +1,5 @@
+const sequelize = require('../config/db');
+const { DataTypes } = require('sequelize');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");

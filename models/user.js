@@ -18,7 +18,7 @@ const User = sequelize.define('User', {
   role: {
     type: DataTypes.ENUM('admin', 'teacher', 'student'),
     allowNull: false,
-  },
+  }
 });
 
-module.exports = User; 
+module.exports = User; // Export directly without wrapping it in a function

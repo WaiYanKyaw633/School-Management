@@ -1,4 +1,4 @@
-const { Course, Teacher } = require('../models');
+const { Course } = require('../models');
 
 const getAllCourses = async (request, reply) => {
   try {
@@ -14,6 +14,16 @@ const createCourse = async (request, reply) => {
   const { name, description } = request.body;
   const teacherId = request.user.id;
 
+  if(name){
+
+    const Exitname=await Course.findOne({where: {name}});
+    if (Exitname){
+      return reply.code(401).send({message: 'Course already exists'});
+    }
+  
+  };
+    
+    
   if (!name || !description) {
     return reply.status(400).send({ message: 'Course name and description are required' });
   }
@@ -80,3 +90,4 @@ module.exports = {
   updateCourse,
   deleteCourse,
 };
+ 

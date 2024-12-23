@@ -1,6 +1,8 @@
+const sequelize = require('../config/db');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user'); 
-const sequelize = require('sequelize');
+const DataTypes = require('sequelize');
+
 module.exports.createStudent = async (req, reply) => {
     try { 
         const { name, email, password } = req.body;
