@@ -18,11 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Teachers',
+        model: 'User', 
         key: 'id',
       },
     },
   });
-
   return Course;
 };

@@ -2,28 +2,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Course = require('../models/course');
 const User = require('../models/user'); 
-const { where } = require('sequelize');
+const sequelize = require('sequelize');
 
-module.exports.createCourse = async (req, reply) => {
-    const { name, description } = req.body;
-    try {
-        const course = await Course.create({ name, description });
-        reply.code(201).send(course);
-    } catch (err) {
-        console.error(err);
-        reply.status(500).send({ error: "Failed to create course" });
-    }
-};
 
-module.exports.getCourses = async (req, reply) => {
-    try {
-        const courses = await Course.findAll(); 
-        reply.send(courses);
-    } catch (err) {
-        console.error(err);
-        reply.status(500).send({ error: "Failed to retrieve courses" });
-    }
-};
+
 
 module.exports.createStudent = async (req, reply) => {
     try { 
@@ -105,3 +87,28 @@ module.exports.deleteUser = async (req, reply) => {
     }
 };
 
+module.exports.updateCourse = async (req, reply) => {
+    try {
+      const { id } = req.params;
+      const { name, description, teacherId } = req.body;
+      if (teacherId) {
+        const teacher = await User.findByPk(teacherId);
+        if (!teacher || teacher.role !== "teacher") {
+          return reply.code(400).send({ status: false, message: "Invalid teacher ID" });
+        }
+      }
+  
+      const updateData = { name, description, teacherId };
+
+      const [updatedRows] = await Course.update(updateData, { where: { id } });
+      if (updatedRows === 0) {
+        return reply.code(404).send({ status: false, message: "Course not found" });
+      }
+  
+      const updatedCourse = await Course.findByPk(id);
+      reply.send({ status: true, message: "Course updated successfully", data: updatedCourse });
+    } catch (err) {
+      console.error("Error during course update:", err);
+      reply.code(500).send({ status: false, error: err.message, message: "Failed to update course" });
+    }
+  };
