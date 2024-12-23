@@ -32,25 +32,22 @@ const createCourse = async (request, reply) => {
 
 const updateCourse = async (request, reply) => {
   const { id } = request.params;
-  const { name, teacherId } = request.body;
-
-  try {
-    const course = await Course.findByPk(id);
+  const { name, description } = request.body;
+  const teacherId = request.user.id; 
+try {
+   const course = await Course.findByPk(id);
     if (!course) {
       return reply.status(404).send({ message: 'Course not found' });
     }
-
-    if (name) course.name = name;
-    if (teacherId) {
-      const teacher = await Teacher.findByPk(teacherId);
-      if (!teacher) {
-        return reply.status(404).send({ message: 'Teacher not found' });
-      }
-      course.teacherId = teacherId;
+      if (course.teacherId !== teacherId) {
+      return reply.status(403).send({ message: 'You are not authorized to update this course' });
     }
+    if (name) course.name = name;
+    if (description) course.description = description;
 
+   
     await course.save();
-    return reply.send({
+      return reply.send({
       message: 'Course updated successfully',
       course,
     });

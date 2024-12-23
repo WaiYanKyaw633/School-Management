@@ -3,10 +3,6 @@ const jwt = require('jsonwebtoken');
 const Course = require('../models/course');
 const User = require('../models/user'); 
 const sequelize = require('sequelize');
-
-
-
-
 module.exports.createStudent = async (req, reply) => {
     try { 
         const { name, email, password } = req.body;
@@ -87,28 +83,3 @@ module.exports.deleteUser = async (req, reply) => {
     }
 };
 
-module.exports.updateCourse = async (req, reply) => {
-    try {
-      const { id } = req.params;
-      const { name, description, teacherId } = req.body;
-      if (teacherId) {
-        const teacher = await User.findByPk(teacherId);
-        if (!teacher || teacher.role !== "teacher") {
-          return reply.code(400).send({ status: false, message: "Invalid teacher ID" });
-        }
-      }
-  
-      const updateData = { name, description, teacherId };
-
-      const [updatedRows] = await Course.update(updateData, { where: { id } });
-      if (updatedRows === 0) {
-        return reply.code(404).send({ status: false, message: "Course not found" });
-      }
-  
-      const updatedCourse = await Course.findByPk(id);
-      reply.send({ status: true, message: "Course updated successfully", data: updatedCourse });
-    } catch (err) {
-      console.error("Error during course update:", err);
-      reply.code(500).send({ status: false, error: err.message, message: "Failed to update course" });
-    }
-  };

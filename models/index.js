@@ -8,4 +8,5 @@ const Teacher = require('./teacher')(sequelize, DataTypes);
 Course.belongsTo(Teacher, { foreignKey: 'teacherId' });
 Teacher.hasMany(Course, { foreignKey: 'teacherId' });
 
+
 module.exports = { sequelize, Course, Teacher };
