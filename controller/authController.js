@@ -12,12 +12,12 @@ exports.login = async (req, reply) => {
         if (!user) {
             
             await bcrypt.compare(password || "", "$2b$10$invalidsaltstringtoavoid");
-            return reply.status(401).send({ error: "Invalid credentials." });
+            return reply.status(401).send({ error: "Invalid passworrds." });
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return reply.status(401).send({ error: "Invalid credentials." });
+            return reply.status(401).send({ error: "Invalid passwords." });
         }
 
       

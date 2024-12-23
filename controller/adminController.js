@@ -1,6 +1,4 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const Course = require('../models/course');
 const User = require('../models/user'); 
 const sequelize = require('sequelize');
 module.exports.createStudent = async (req, reply) => {
@@ -8,7 +6,7 @@ module.exports.createStudent = async (req, reply) => {
         const { name, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
         const student = await User.create({ name, email, password: hashedPassword, role: "student" });
-        reply.send(student);
+        reply.send({message:"Student Created Successfully",student});
     } catch (err) {
         reply.code(500).send({ status: false, error: err.message, message: "Failed to create student" });
     }
@@ -19,7 +17,7 @@ module.exports.createTeacher = async (req, reply) => {
         const { name, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
         const teacher = await User.create({ name, email, password: hashedPassword, role: "teacher" });
-        reply.send(teacher);
+        reply.send({message:"Teacher Created Successfully" ,teacher});
     } catch (err) {
         reply.code(500).send({ status: false, error: err.message, message: "Failed to create teacher" });
     }
