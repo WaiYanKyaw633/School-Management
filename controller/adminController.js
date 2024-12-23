@@ -1,13 +1,18 @@
+const sequelize = require('../config/db');
+const { DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Course = require('../models/course');
-const User = require('../models/user'); 
-const { where } = require('sequelize');
+const User = require('../models/user')(sequelize, DataTypes); 
+const { Course, Teacher } = require('../models');
 
 module.exports.createCourse = async (req, reply) => {
-    const { name, description } = req.body;
+    const { name, description, teacherId } = req.body;
     try {
-        const course = await Course.create({ name, description });
+        const course = await Course.create({ 
+            name,
+            description,
+            teacherId 
+        });
         reply.code(201).send(course);
     } catch (err) {
         console.error(err);

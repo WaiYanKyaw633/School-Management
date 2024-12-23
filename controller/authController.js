@@ -1,6 +1,8 @@
+const sequelize = require('../config/db');
+const { DataTypes } = require('sequelize');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const User = require("../models/user")(sequelize, DataTypes);
 
 exports.login = async (req, reply) => {
     try {
@@ -27,7 +29,7 @@ exports.login = async (req, reply) => {
         const token = jwt.sign(
             { id: user.id, name: user.name, role: user.role },
             process.env.JWT_SECRET,
-            { expiresIn: "1h" }
+            { expiresIn: "5h" }
         );
 
         
