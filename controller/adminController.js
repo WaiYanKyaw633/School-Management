@@ -2,6 +2,7 @@ const sequelize = require('../config/db');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user'); 
 const DataTypes = require('sequelize');
+const { Op } = require('sequelize');
 
 module.exports.createStudent = async (req, reply) => {
     try { 
@@ -35,17 +36,18 @@ module.exports.UpdateUser = async (req, reply) => {
                 return reply.code(400).send({ message: "Email is already taken by another user." });
             }
         }
-        if (role !=='student' && role !== 'teacher') {
-            return reply.code(400).send({message: " Choose Student Or Teacher"});
-           }
-        const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
+            const validRole= ['student' , 'teacher'];
+            if (role && !validRole.includes(role)){
+                return reply.code(400).send ({message: "invalid role: choose student or teacher"});
+            }
+        const hashedPassword = password ? await bcrypt.hash(password, 10): undefined;
         const updateData = {};
         if (name) updateData.name = name;
         if (email) updateData.email = email;
         if (password) updateData.password = hashedPassword;
         if (role) updateData.role = role;
-
-        const updatedUser = await User.update(
+       
+            const updatedUser = await User.update(
             updateData,
             { where: { id } }
         );
