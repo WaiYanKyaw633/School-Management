@@ -36,7 +36,8 @@ module.exports.UpdateUser = async (req, reply) => {
                 return reply.code(400).send({status:false,message: "Email is already taken by another user." });
             }
         }
-        const validRole = ['student', 'teacher'];
+        con
+         validRole = ['student', 'teacher'];
         if (role && !validRole.includes(role)) {
             return reply.code(400).send({status:false,message: "invalid role: choose student or teacher" });
         }
