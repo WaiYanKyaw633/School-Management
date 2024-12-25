@@ -8,5 +8,6 @@ fastify.post('/admin/students', { preHandler: authorizeRole(['admin']) }, adminC
 fastify.post('/admin/teachers', { preHandler: authorizeRole(['admin']) }, adminController.createTeacher);
 fastify.put('/admin/update/:id', {preHandler:authorizeRole(['admin'])},adminController.UpdateUser);
 fastify.delete('/admin/delete/:id', {preHandler:authorizeRole(['admin'])},adminController.deleteUser);
+fastify.get('/admin/users',{preHandler:authorizeRole(['admin'])},adminController.viewUser);
 
 };

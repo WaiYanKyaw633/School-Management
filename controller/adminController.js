@@ -26,6 +26,43 @@ module.exports.createTeacher = async (req, reply) => {
     }
 };
 
+module.exports.viewUser = async (request, reply) => {
+    try {
+    const students = await User.findAll({ where: { role: 'student' } });
+    const teachers = await User.findAll({ where: { role: 'teacher' } });
+        const studentDetails = students.map(student => ({
+        Name: student.name,
+        Email: student.email,
+      }));
+        const teacherDetails = teachers.map(teacher => ({
+        Name: teacher.name,
+        Email: teacher.email,
+      }));
+  
+     const totalCount = studentDetails.length + teacherDetails.length;
+     
+      return reply.send({
+        status: true,
+        data: {
+            TotalUsers: {
+                count: totalCount,            
+              },
+          Student: {
+            count: studentDetails.length, 
+            details: studentDetails,       
+          },
+          Teacher: {
+            count: teacherDetails.length,  
+            details: teacherDetails,      
+          },
+          },
+      });
+    } catch (error) {
+      console.error('Error fetching users by role:', error);
+      return reply.status(500).send({ message: 'Error fetching users by role' });
+    }
+  };
+  
 module.exports.UpdateUser = async (req, reply) => {
     try {
         const { id } = req.params;
