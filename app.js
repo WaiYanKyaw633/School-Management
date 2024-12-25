@@ -6,6 +6,7 @@ const adminRoutes=require("./routes/admin");
 const teacherRoutes=require("./routes/teacherRoutes");
 const studentRoutes=require("./routes/student");
 
+
 fastify.register(authRoutes);
 fastify.register(adminRoutes);
 fastify.register(teacherRoutes);
@@ -14,7 +15,7 @@ fastify.register(studentRoutes);
 (async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ force: false});
     console.log("Database connected and models synced successfully.");
   } catch (err) {
     console.error("Error connecting to the database:", err);

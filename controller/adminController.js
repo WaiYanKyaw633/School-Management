@@ -1,7 +1,7 @@
 const sequelize = require('../config/db');
-const bcrypt = require('bcryptjs');
-const User = require('../models/user');
 const DataTypes = require('sequelize');
+const bcrypt = require('bcryptjs');
+const User = require('../models/user')(sequelize,DataTypes);
 const { Op } = require('sequelize');
 
 module.exports.createStudent = async (req, reply) => {
@@ -36,8 +36,8 @@ module.exports.UpdateUser = async (req, reply) => {
                 return reply.code(400).send({status:false,message: "Email is already taken by another user." });
             }
         }
-        con
-         validRole = ['student', 'teacher'];
+      
+        const validRole = ['student', 'teacher'];
         if (role && !validRole.includes(role)) {
             return reply.code(400).send({status:false,message: "invalid role: choose student or teacher" });
         }
