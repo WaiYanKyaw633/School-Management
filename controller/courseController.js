@@ -83,40 +83,61 @@ const getStudentsForTeacherCourses = async (req, reply) => {
   const teacherId = req.user.id;
 
   try {
-   
+
     const students = await Enrollment.findAll({
       include: [
         {
           model: Course,
-          attributes: ['name'],
+          attributes: ['id', 'name'],
           where: { teacherId }, 
         },
         {
           model: User,
-          attributes: ['name'],
-          where: { role: 'student' },
+          attributes: ['id', 'name'],
+          where: { role: 'student' }, 
         },
       ],
     });
 
-    const result = students.map((enrollment) => ({
-      studentId: enrollment.UserId,
-      courseId: enrollment.CourseId,
-      courseName: enrollment.Course.name,
-      studentName: enrollment.User.name,
-    
-    }));
+  const resultMap = new Map();
+   students.forEach((apple) => {
+      const { Course, User } = apple;
+      const courseId = Course.id;
+
+      if (!resultMap.has(courseId)) {
+        resultMap.set(courseId, {
+          courseId,
+          courseName: Course.name,
+          studentCount: 0, 
+          students: [],
+        });
+      }
+
+     
+      const courseData = resultMap.get(courseId);
+      courseData.students.push({
+        studentName: User.name,
+      });
+      courseData.studentCount += 1; 
+    });
+
+   
+    const result = Array.from(resultMap.values());
 
     return reply.status(200).send({
-      message: 'Students for Teacher\'s Courses',
+      message: 'Students grouped by courses with counts retrieved successfully.',
       data: result,
-      studentCount: students.length,
+    
     });
   } catch (error) {
     console.error('Error fetching students for teacher\'s courses:', error);
-    return reply.status(500).send({ error: 'Failed to retrieve data' });
+    return reply.status(500).send({
+      error: 'Failed to retrieve data',
+      details: error.message,
+    });
   }
 };
+
 
 
 module.exports = {
